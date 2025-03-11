@@ -20,7 +20,7 @@
 .r-buttons button{
   font-size: 1.2rem;
   padding: .2rem .8rem;
-  color: blue;
+  color: #1D3557;
   border: none;
   border-radius: 5px;
   background-color: white;
@@ -28,7 +28,7 @@
 }
 .r-buttons>:nth-child(1)
 {
-  background-color: #EEEEFF;
+  background-color: #1d355720;
 }
 .r-buttons>:nth-child(2)
 {

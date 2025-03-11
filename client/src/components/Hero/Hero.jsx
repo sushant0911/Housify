@@ -18,14 +18,14 @@ const Hero = () => {
               type: "ease-in",
             }}
             >
-              Discover <br />
-              Most Suitable
-              <br /> Property
+              Unlock <br />
+              Dream House
+              <br /> With Ease
             </motion.h1>
           </div>
           <div className="flexColStart secondaryText flexhero-des">
-            <span>Find a variety of properties that suit you very easilty</span>
-            <span>Forget all difficulties in finding a residence for you</span>
+            <span>Helping you find your Dream House</span>
+            <span>Forget all the difficulties of finding your dream home—we make it effortless!</span>
           </div>
 
           <SearchBar/>
@@ -65,7 +65,7 @@ const Hero = () => {
             }}
             className="image-container"
           >
-            <img src="./hero-image.png" alt="houses" />
+            <img src="./hero-image.jpg" alt="houses" />
           </motion.div>
         </div>
       </div>
