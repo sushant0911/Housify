@@ -10,7 +10,7 @@
   justify-content: space-between;
 }
 
-.h-container button {
+.h-container .loginButton {
   background: var(--orange-gradient);
 }
 
