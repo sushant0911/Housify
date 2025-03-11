@@ -11,6 +11,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
      clientId="RXlGXkr49Ev5MHpvAC6vKkZ4bVn11iwl"
      authorizationParams={{
       redirect_uri: "https://housify-six.vercel.app"
+      // adding the authorization
      }}
      audience="http://localhost:8000"
      scope="openid profile email"
