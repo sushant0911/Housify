@@ -27,8 +27,8 @@
 }
 .mode .button {
   width: 100%;
-  background: var(--lightBlue);
-  color: var(--blue);
+  background: #1d35571c;
+  color: #1D3557;
   font-size: 0.9rem;
   font-weight: 600;
 }

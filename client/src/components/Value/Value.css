@@ -33,11 +33,11 @@
 
 .icon {
   padding: 10px;
-  background: #eeeeff;
+  background: #1d35571c;
   border-radius: 5px;
 }
 .icon svg {
-  fill: var(--blue);
+  fill: #1D3557;
 }
 
 .accordionButton .primaryText{

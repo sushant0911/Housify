@@ -11,6 +11,14 @@
   align-items: flex-end; 
 }
 
+.hero-container button {
+  background: var(--orange-gradient);
+}
+
+.hero-container .secondaryText{
+  color: rgb(201, 201, 201);
+}
+
 
 /* left side */
 .hero-left {

@@ -2,9 +2,9 @@
   --primary: #1f3e72;
   --secondary: rgba(255, 255, 255, 0.78);
   --golden : #E9C46A;
-  --black: #3e362e;
-  --orange-gradient: linear-gradient(270deg,#f79934,#ff8400);
-  --blue-gradient: linear-gradient(90deg, #93785b 0%, #a69080 100%);
+  --black: #1D3557;
+  --orange-gradient: linear-gradient(270deg,#fb870b,#ffbf00);
+  --blue-gradient: linear-gradient(90deg, #1f3e72 0%, #486597 100%);
   --blue: #4066ff;
   --lightBlue: #eeeeff;
   --shadow: 0px 23px 21px -8px rgba(136, 160, 255, 0.25);
@@ -77,9 +77,10 @@ a {
 }
 
 .secondaryText {
-  color: rgb(219, 219, 219);
+  color: rgb(100, 100, 100);
   font-size: 0.9rem;
 }
+
 .orangeText {
   color: orange;
   font-size: 1.5rem;
