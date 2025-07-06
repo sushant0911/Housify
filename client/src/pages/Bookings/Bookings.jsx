@@ -1,10 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import useProperties from "../../hooks/useProperties";
 import { PuffLoader } from "react-spinners";
 import PropertyCard from "../../components/PropertyCard/PropertyCard";
 import "../Properties/Properties.css";
 import UserDetailContext from "../../context/UserDetailContext";
+import useBookings from "../../hooks/useBookings";
 
 const Bookings = () => {
   const { data, isError, isLoading } = useProperties();
@@ -12,6 +13,12 @@ const Bookings = () => {
   const {
     userDetails: { bookings },
   } = useContext(UserDetailContext);
+  const { refetch: refetchBookings } = useBookings();
+
+  // Refetch bookings when component mounts
+  useEffect(() => {
+    refetchBookings();
+  }, [refetchBookings]);
 
   if (isError) {
     return (
@@ -40,24 +47,24 @@ const Bookings = () => {
         <SearchBar filter={filter} setFilter={setFilter} />
 
         <div className="paddings flexCenter properties">
-          {
-            // data.map((card, i)=> (<PropertyCard card={card} key={i}/>))
-
+          {data &&
+          Array.isArray(data) &&
+          bookings &&
+          Array.isArray(bookings) ? (
             data
               .filter((property) =>
                 bookings.map((booking) => booking.id).includes(property.id)
               )
-
               .filter(
                 (property) =>
                   property.title.toLowerCase().includes(filter.toLowerCase()) ||
                   property.city.toLowerCase().includes(filter.toLowerCase()) ||
                   property.country.toLowerCase().includes(filter.toLowerCase())
               )
-              .map((card, i) => (
-                <PropertyCard card={card} key={i} />
-              ))
-          }
+              .map((card, i) => <PropertyCard card={card} key={i} />)
+          ) : (
+            <span>No bookings available</span>
+          )}
         </div>
       </div>
     </div>

@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Avatar, Menu } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import UserDetailContext from "../../context/UserDetailContext";
 
 const ProfileMenu = ({ user, logout }) => {
   const navigate = useNavigate();
+  const { setUserDetails } = useContext(UserDetailContext);
 
   return (
     <Menu>
@@ -22,6 +24,11 @@ const ProfileMenu = ({ user, logout }) => {
         <Menu.Item
           onClick={() => {
             localStorage.clear();
+            setUserDetails({
+              favourites: [],
+              bookings: [],
+              token: null,
+            });
             logout();
           }}
         >

@@ -1,5 +1,5 @@
 import { Container, Modal, Stepper } from "@mantine/core";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddLocation from "../AddLocation/AddLocation";
 import { useAuth0 } from "@auth0/auth0-react";
 import UploadImage from "../UploadImage/UploadImage";
@@ -33,6 +33,28 @@ const AddPropertyModal = ({ opened, setOpened }) => {
   const prevStep = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
   };
+
+  // Update userEmail whenever user changes
+  useEffect(() => {
+    if (user?.email) {
+      setPropertyDetails((prev) => ({
+        ...prev,
+        userEmail: user.email,
+      }));
+    }
+  }, [user?.email]);
+
+  // Close modal if user is not authenticated
+  useEffect(() => {
+    if (opened && !user?.email) {
+      setOpened(false);
+    }
+  }, [opened, user?.email, setOpened]);
+
+  // Don't render modal if user is not authenticated
+  if (!user?.email) {
+    return null;
+  }
 
   return (
     <Modal

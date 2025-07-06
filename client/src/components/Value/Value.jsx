@@ -8,9 +8,7 @@ import {
   AccordionItemState,
 } from "react-accessible-accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
-import {
-  MdOutlineArrowDropDown,
-} from "react-icons/md";
+import { MdOutlineArrowDropDown } from "react-icons/md";
 import data from "../../utils/accordion.jsx";
 import "./Value.css";
 // Demo styles, see 'Styles' section below for some notes on use.
@@ -43,37 +41,36 @@ const Value = () => {
             allowMultipleExpanded={false}
             preExpanded={[0]}
           >
-            {data.map((item, i) => {
-              const [className, setClassName] = useState(null);
-              return (
-                <AccordionItem className={`accordionItem ${className}`} uuid={i} key={i}>
-                  <AccordionItemHeading>
-                    <AccordionItemButton className="flexCenter accordionButton ">
-                        {/* just for getting state of item */}
-                      <AccordionItemState>
-                        {({ expanded }) =>
-                          expanded
-                            ? setClassName("expanded")
-                            : setClassName("collapsed")
-                        }
-                      </AccordionItemState>
-                      <div className="flexCenter icon">{item.icon}</div>
-                      <span
-                        className="primaryText"
-                      >
-                        {item.heading}
-                      </span>
-                      <div className="flexCenter icon">
-                        <MdOutlineArrowDropDown size={20} />
-                      </div>
-                    </AccordionItemButton>
-                  </AccordionItemHeading>
-                  <AccordionItemPanel>
-                    <p className="secondaryText">{item.detail}</p>
-                  </AccordionItemPanel>
-                </AccordionItem>
-              );
-            })}
+            {data.map((item, i) => (
+              <AccordionItem className="accordionItem" uuid={i} key={i}>
+                <AccordionItemHeading>
+                  <AccordionItemButton className="flexCenter accordionButton">
+                    <AccordionItemState>
+                      {({ expanded }) => (
+                        <>
+                          <div className="flexCenter icon">{item.icon}</div>
+                          <span className="primaryText">{item.heading}</span>
+                          <div className="flexCenter icon">
+                            <MdOutlineArrowDropDown
+                              size={20}
+                              style={{
+                                transform: expanded
+                                  ? "rotate(180deg)"
+                                  : "rotate(0deg)",
+                                transition: "transform 0.3s ease",
+                              }}
+                            />
+                          </div>
+                        </>
+                      )}
+                    </AccordionItemState>
+                  </AccordionItemButton>
+                </AccordionItemHeading>
+                <AccordionItemPanel>
+                  <p className="secondaryText">{item.detail}</p>
+                </AccordionItemPanel>
+              </AccordionItem>
+            ))}
           </Accordion>
         </div>
       </div>

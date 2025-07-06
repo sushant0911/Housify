@@ -34,8 +34,7 @@ const Properties = () => {
         <SearchBar filter={filter} setFilter={setFilter} />
 
         <div className="paddings flexCenter properties">
-          {
-
+          {data && Array.isArray(data) ? (
             data
               .filter(
                 (property) =>
@@ -43,10 +42,10 @@ const Properties = () => {
                   property.city.toLowerCase().includes(filter.toLowerCase()) ||
                   property.country.toLowerCase().includes(filter.toLowerCase())
               )
-              .map((card, i) => (
-                <PropertyCard card={card} key={i} />
-              ))
-          }
+              .map((card, i) => <PropertyCard card={card} key={i} />)
+          ) : (
+            <span>No properties available</span>
+          )}
         </div>
       </div>
     </div>

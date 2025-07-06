@@ -7,22 +7,36 @@ import { getAllBookings, getAllFav } from "../utils/api";
 const useBookings = () => {
   const { userDetails, setUserDetails } = useContext(UserDetailContext);
   const queryRef = useRef();
-  const { user } = useAuth0();
+  const { user, isAuthenticated } = useAuth0();
+
+  // Ensure all conditions are boolean
+  const isEnabled = Boolean(
+    isAuthenticated && user?.email && userDetails?.token
+  );
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: "allBookings",
+    queryKey: ["allBookings", user?.email],
     queryFn: () => getAllBookings(user?.email, userDetails?.token),
-    onSuccess: (data) =>
-      setUserDetails((prev) => ({ ...prev, bookings: data })),
-    enabled: user !== undefined,
+    onSuccess: (data) => {
+      console.log("Bookings fetched successfully:", data);
+      setUserDetails((prev) => ({ ...prev, bookings: data }));
+    },
+    onError: (error) => {
+      console.error("Error fetching bookings:", error);
+      setUserDetails((prev) => ({ ...prev, bookings: [] }));
+    },
+    enabled: isEnabled,
     staleTime: 30000,
+    retry: 1,
   });
 
   queryRef.current = refetch;
 
   useEffect(() => {
-    queryRef.current && queryRef.current();
-  }, [userDetails?.token]);
+    if (isAuthenticated && user?.email && userDetails?.token) {
+      queryRef.current && queryRef.current();
+    }
+  }, [userDetails?.token, isAuthenticated, user?.email]);
 
   return { data, isError, isLoading, refetch };
 };

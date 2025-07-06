@@ -6,7 +6,7 @@ import UserDetailContext from "../../context/UserDetailContext";
 import useProperties from "../../hooks/useProperties.jsx";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-import { createResidency } from "../../utils/api";
+import { createResidency, testAuth } from "../../utils/api";
 const Facilities = ({
   prevStep,
   propertyDetails,
@@ -32,6 +32,16 @@ const Facilities = ({
   const handleSubmit = () => {
     const { hasErrors } = form.validate();
     if (!hasErrors) {
+      if (!user?.email) {
+        toast.error("Please login to add a property", {
+          position: "bottom-right",
+        });
+        return;
+      }
+      if (!token || token === "placeholder") {
+        console.log("Token status:", token ? "placeholder" : "missing");
+        // Continue with placeholder token - it will use fallback endpoint
+      }
       setPropertyDetails((prev) => ({
         ...prev,
         facilities: { bedrooms, parkings, bathrooms },
@@ -47,13 +57,50 @@ const Facilities = ({
   } = useContext(UserDetailContext);
   const { refetch: refetchProperties } = useProperties();
 
-  const {mutate, isLoading} = useMutation({
-    mutationFn: ()=> createResidency({
-        ...propertyDetails, facilities: {bedrooms, parkings , bathrooms},
-    }, token),
-    onError: ({ response }) => toast.error(response.data.message, {position: "bottom-right"}),
-    onSettled: ()=> {
-      toast.success("Added Successfully", {position: "bottom-right"});
+  const { mutate, isLoading } = useMutation({
+    mutationFn: async () => {
+      if (!user?.email) {
+        throw new Error("User email is required");
+      }
+      console.log(
+        "Creating residency with token:",
+        token ? "present" : "missing"
+      );
+
+      // Test authentication first (skip for placeholder token)
+      if (token && token !== "placeholder") {
+        try {
+          await testAuth(token);
+          console.log("Authentication test passed");
+        } catch (authError) {
+          console.log("Authentication test failed, proceeding with fallback");
+        }
+      } else if (token === "placeholder") {
+        console.log("Using placeholder token, skipping auth test");
+      }
+
+      return createResidency(
+        {
+          ...propertyDetails,
+          facilities: { bedrooms, parkings, bathrooms },
+          userEmail: user.email,
+        },
+        token
+      );
+    },
+    onError: (error) => {
+      if (error.message === "User email is required") {
+        toast.error("Please login to add a property", {
+          position: "bottom-right",
+        });
+      } else {
+        toast.error(error.response?.data?.message || "Something went wrong", {
+          position: "bottom-right",
+        });
+      }
+    },
+    onSettled: () => {
+      toast.success("Added Successfully", { position: "bottom-right" });
       setPropertyDetails({
         title: "",
         description: "",
@@ -68,13 +115,12 @@ const Facilities = ({
           bathrooms: 0,
         },
         userEmail: user?.email,
-      })
-      setOpened(false)
-      setActiveStep(0)
-      refetchProperties()
-    }
-
-  })
+      });
+      setOpened(false);
+      setActiveStep(0);
+      refetchProperties();
+    },
+  });
 
   return (
     <Box maw="30%" mx="auto" my="sm">

@@ -17,10 +17,13 @@ import Favourites from "./pages/Favourites/Favourites";
 function App() {
   const queryClient = new QueryClient();
 
+  // Initialize token from localStorage if available
+  const initialToken = localStorage.getItem("access_token");
+
   const [userDetails, setUserDetails] = useState({
     favourites: [],
     bookings: [],
-    token: null,
+    token: initialToken,
   });
 
   return (
