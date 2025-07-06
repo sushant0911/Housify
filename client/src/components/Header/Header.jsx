@@ -28,7 +28,7 @@ const Header = () => {
       <div className="flexCenter innerWidth paddings h-container">
         {/* logo */}
         <Link to="/">
-          <img src="./logo.png" alt="logo" width={120} />
+          <img src="logo.png" alt="logo" width={120} />
         </Link>
 
         {/* menu */}
@@ -44,7 +44,7 @@ const Header = () => {
           >
             <NavLink to="/properties">Properties</NavLink>
 
-            <a href="mailto:sushantgupta.brg2003@gmail.com">Contact</a>
+            <a href="mailto:sushantgupta.dev@gmail.com">Contact</a>
 
             {/* add property */}
             <div onClick={handleAddPropertyClick}>Add Property</div>

@@ -17,6 +17,6 @@
 .inner-container .button {
     background: #24487a;
     border: 2px solid white;
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow); 
     border-radius: 10px;
 }

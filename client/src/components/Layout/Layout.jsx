@@ -36,7 +36,6 @@ const Layout = () => {
       mutate(res)
     };
 
-
     isAuthenticated && getTokenAndRegsiter();
   }, [isAuthenticated]);
 

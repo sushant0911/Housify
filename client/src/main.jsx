@@ -7,10 +7,10 @@ import { Auth0Provider } from "@auth0/auth0-react";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Auth0Provider
-     domain="dev-rcyesob4j4uh7807.us.auth0.com"
-     clientId="0gy6V4cDaqa46as4dLOSkwAumD5oCcxJ"
+     domain="dev-ls532ldoa0brzf46.us.auth0.com"
+     clientId="G8hjLURB64trhZQMXEqJiDafW4mrUbJi"
      authorizationParams={{
-      redirect_uri: "https://housify-six.vercel.app"
+      redirect_uri: "http://localhost:5173/"
       // adding the authorization
      }}
      audience="http://localhost:8000"

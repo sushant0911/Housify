@@ -2,6 +2,8 @@ import asyncHandler from "express-async-handler";
 
 import { prisma } from "../config/prismaConfig.js";
 
+// function to create a new user
+// This function checks if the user already exists in the database by email.
 export const createUser = asyncHandler(async (req, res) => {
   console.log("creating a user");
 
@@ -16,7 +18,7 @@ export const createUser = asyncHandler(async (req, res) => {
   } else res.status(201).send({ message: "User already registered" });
 });
 
-// function to book a visit to resd
+// function to book a visit to residency
 export const bookVisit = asyncHandler(async (req, res) => {
   const { email, date } = req.body;
   const { id } = req.params;
@@ -124,7 +126,7 @@ export const toFav = asyncHandler(async (req, res) => {
   } catch (err) {
     throw new Error(err.message);
   }
-});
+ });
 
 // function to get all favorites
 export const getAllFavorites = asyncHandler(async (req, res) => {
