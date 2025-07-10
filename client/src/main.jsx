@@ -10,7 +10,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       domain="dev-ls532ldoa0brzf46.us.auth0.com"
       clientId="G8hjLURB64trhZQMXEqJiDafW4mrUbJi"
       authorizationParams={{
-        redirect_uri: "http://localhost:5173/",
+        redirect_uri: "https://housify-six.vercel.app/",
         // adding the authorization
       }}
       audience="http://localhost:8000"

@@ -1,12 +1,11 @@
 import { auth } from 'express-oauth2-jwt-bearer'
 
 const jwtCheck = auth({
-    audience: "http://localhost:8000",
+    audience: "https://housify-nine.vercel.app",
     issuerBaseURL: "https://dev-ls532ldoa0brzf46.us.auth0.com",
     tokenSigningAlg: "RS256"
 })
 
-// Custom middleware that tries JWT auth but falls back gracefully
 export const optionalJwtCheck = (req, res, next) => {
     // Try to authenticate, but don't fail if token is invalid
     jwtCheck(req, res, (err) => {
