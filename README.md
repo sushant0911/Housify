@@ -1,5 +1,8 @@
 # Housify
 
+<img width="1902" height="865" alt="image" src="https://github.com/user-attachments/assets/c6c743d9-5f7d-455f-988b-572d491e2879" />
+
+
 Housify is a modern real estate management platform that allows users to browse, book, and manage properties with ease. The project features a full-stack architecture with a React frontend and a Node.js/Express backend, utilizing Prisma for database management.
 
 ## Features
