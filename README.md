@@ -119,4 +119,4 @@ This project is licensed under the MIT License.
 - [Prisma](https://www.prisma.io/) for ORM
 
 ---------------------------------------------------------------------------------------------------------------------------
-DO GIVE A STAR IF YOU LIKE THE PROJECT
+DO GIVE A STAR ⭐ IF YOU LIKE THE PROJECT
