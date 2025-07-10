@@ -1,14 +1,11 @@
 import React, { useContext, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getProperty, removeBooking } from "../../utils/api";
 import { PuffLoader } from "react-spinners";
-import { AiFillHeart } from "react-icons/ai";
-import "./Property.css";
-
 import { FaShower } from "react-icons/fa";
 import { AiTwotoneCar } from "react-icons/ai";
-import { MdLocationPin, MdMeetingRoom } from "react-icons/md";
+import { MdLocationPin, MdMeetingRoom, MdPeople } from "react-icons/md";
 import Map from "../../components/Map/Map";
 import useAuthCheck from "../../hooks/useAuthCheck";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -17,8 +14,12 @@ import UserDetailContext from "../../context/UserDetailContext.js";
 import { Button } from "@mantine/core";
 import { toast } from "react-toastify";
 import Heart from "../../components/Heart/Heart";
+import PropertyManagement from "../../components/PropertyManagement/PropertyManagement";
+import "./Property.css";
+
 const Property = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const id = pathname.split("/").slice(-1)[0];
   const { data, isLoading, isError } = useQuery(["resd", id], () =>
     getProperty(id)
@@ -42,6 +43,10 @@ const Property = () => {
       }));
 
       toast.success("Booking cancelled", { position: "bottom-right" });
+    },
+    onError: (error) => {
+      console.error("Cancel booking error:", error);
+      // The error message is already shown by the API function
     },
   });
 
@@ -70,8 +75,22 @@ const Property = () => {
       <div className="flexColStart paddings innerWidth property-container">
         {/* like button */}
         <div className="like">
-          <Heart id={id}/>
+          <Heart id={id} />
         </div>
+
+        {/* Property Management - only show for owned properties */}
+        {data?.userEmail === user?.email && (
+          <div
+            style={{
+              position: "absolute",
+              top: "3rem",
+              right: "6rem",
+              zIndex: 10,
+            }}
+          >
+            <PropertyManagement property={data} />
+          </div>
+        )}
 
         {/* image */}
         <img src={data?.image} alt="home image" />
@@ -119,14 +138,23 @@ const Property = () => {
             <div className="flexStart" style={{ gap: "1rem" }}>
               <MdLocationPin size={25} />
               <span className="secondaryText">
-                {data?.address}{" "}
-                {data?.city}{" "}
-                {data?.country}
+                {data?.address} {data?.city} {data?.country}
               </span>
             </div>
 
             {/* booking button */}
-            {bookings?.map((booking) => booking.id).includes(id) ? (
+            {data?.userEmail === user?.email ? (
+              <Button
+                variant="filled"
+                color="blue"
+                leftSection={<MdPeople size={16} />}
+                onClick={() => navigate("/property-visitors")}
+                className="visitors-button"
+                style={{ marginTop: "2rem", width: "fit-content" }}
+              >
+                View Property Visitors
+              </Button>
+            ) : bookings?.map((booking) => booking.id).includes(id) ? (
               <>
                 <Button
                   variant="outline"

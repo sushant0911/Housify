@@ -4,7 +4,7 @@ import { useForm } from "@mantine/form";
 import React, { useContext } from "react";
 import UserDetailContext from "../../context/UserDetailContext";
 import useProperties from "../../hooks/useProperties.jsx";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 import { createResidency, testAuth } from "../../utils/api";
 const Facilities = ({
@@ -39,7 +39,6 @@ const Facilities = ({
         return;
       }
       if (!token || token === "placeholder") {
-        console.log("Token status:", token ? "placeholder" : "missing");
         // Continue with placeholder token - it will use fallback endpoint
       }
       setPropertyDetails((prev) => ({
@@ -56,27 +55,23 @@ const Facilities = ({
     userDetails: { token },
   } = useContext(UserDetailContext);
   const { refetch: refetchProperties } = useProperties();
+  const queryClient = useQueryClient();
 
   const { mutate, isLoading } = useMutation({
     mutationFn: async () => {
       if (!user?.email) {
         throw new Error("User email is required");
       }
-      console.log(
-        "Creating residency with token:",
-        token ? "present" : "missing"
-      );
 
       // Test authentication first (skip for placeholder token)
       if (token && token !== "placeholder") {
         try {
           await testAuth(token);
-          console.log("Authentication test passed");
         } catch (authError) {
-          console.log("Authentication test failed, proceeding with fallback");
+          // console.log("Authentication test failed, proceeding with fallback");
         }
       } else if (token === "placeholder") {
-        console.log("Using placeholder token, skipping auth test");
+        // console.log("Using placeholder token, skipping auth test");
       }
 
       return createResidency(
@@ -119,6 +114,7 @@ const Facilities = ({
       setOpened(false);
       setActiveStep(0);
       refetchProperties();
+      queryClient.invalidateQueries(["ownedProperties", user?.email]);
     },
   });
 

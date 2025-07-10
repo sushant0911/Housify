@@ -40,40 +40,53 @@ export const getProperty = async (id) => {
 
 export const createUser = async (email, token, userData = {}) => {
   try {
-    console.log("API: createUser called with:", { email, token: token ? "present" : "missing", userData });
-    
-    // Choose endpoint based on token availability
-    const endpoint = token ? `/user/register` : `/user/register-no-auth`;
-    
-    const headers = {};
-    if (token) {
-      headers.Authorization = `Bearer ${token}`;
+    // If token is placeholder or missing, use no-auth endpoint
+    if (!token || token === "placeholder") {
+      const response = await api.post(
+        `/user/register-no-auth`,
+        { 
+          email,
+          name: userData.name || null,
+          image: userData.picture || null
+        }
+      );
+      return response.data;
     }
-    
-    const response = await api.post(
-      endpoint,
-      { 
-        email,
-        name: userData.name || null,
-        image: userData.picture || null
-      },
-      {
-        headers,
-      }
-    );
-    
-    console.log("API: createUser response:", response.data);
-    return response.data;
+    // Try with authentication first
+    try {
+      const headers = { Authorization: `Bearer ${token}` };
+      const response = await api.post(
+        `/user/register`,
+        { 
+          email,
+          name: userData.name || null,
+          image: userData.picture || null
+        },
+        { headers }
+      );
+      return response.data;
+    } catch (authError) {
+      // Fallback to no-auth endpoint
+      const response = await api.post(
+        `/user/register-no-auth`,
+        { 
+          email,
+          name: userData.name || null,
+          image: userData.picture || null
+        }
+      );
+      return response.data;
+    }
   } catch (error) {
-    console.error("API: createUser error:", error.response?.data || error.message);
-    toast.error("Something went wrong, Please try again");
+    if (error.response?.status !== 401 && error.response?.status !== 404) {
+      console.error("Non-auth error in createUser:", error);
+    }
     throw error;
   }
 };
 
 export const bookVisit = async (date, propertyId, email, token) => {
   try {
-    console.log("bookVisit API call - date:", date, "propertyId:", propertyId, "email:", email, "token present:", !!token);
     
     const headers = {};
     if (token) {
@@ -92,7 +105,6 @@ export const bookVisit = async (date, propertyId, email, token) => {
       }
     );
     
-    console.log("bookVisit API call successful:", response.data);
     return response.data;
   } catch (error) {
     console.error("bookVisit error:", error);
@@ -100,7 +112,6 @@ export const bookVisit = async (date, propertyId, email, token) => {
     
     // If authentication fails, try without token as fallback
     if (error.response?.status === 401) {
-      console.log("Authentication failed, trying without token...");
       try {
         const fallbackResponse = await api.post(
           `/user/bookVisit-no-auth/${propertyId}`,
@@ -111,7 +122,6 @@ export const bookVisit = async (date, propertyId, email, token) => {
           }
         );
         
-        console.log("Fallback bookVisit API call successful:", fallbackResponse.data);
         return fallbackResponse.data;
       } catch (fallbackError) {
         console.error("Fallback bookVisit error:", fallbackError);
@@ -128,14 +138,13 @@ export const bookVisit = async (date, propertyId, email, token) => {
 
 export const removeBooking = async (id, email, token) => {
   try {
-    console.log("removeBooking API call - id:", id, "email:", email);
     
     const headers = {};
     if (token) {
       headers.Authorization = `Bearer ${token}`;
     }
     
-    await api.post(
+    const response = await api.post(
       `/user/removeBooking/${id}`,
       {
         email,
@@ -145,17 +154,37 @@ export const removeBooking = async (id, email, token) => {
       }
     );
     
-    console.log("removeBooking API call successful");
+    return response.data;
   } catch (error) {
     console.error("removeBooking error:", error);
-    toast.error("Something went wrong, Please try again");
-    throw error;
+    console.error("Error response:", error.response?.data);
+    
+    // If authentication fails, try without token as fallback
+    if (error.response?.status === 401) {
+      try {
+        const fallbackResponse = await api.post(
+          `/user/removeBooking-no-auth/${id}`,
+          {
+            email,
+          }
+        );
+        
+        return fallbackResponse.data;
+      } catch (fallbackError) {
+        console.error("Fallback removeBooking error:", fallbackError);
+        toast.error("Authentication failed. Please login again.");
+        throw fallbackError;
+      }
+    } else {
+      const errorMessage = error.response?.data?.message || "Something went wrong, Please try again";
+      toast.error(errorMessage);
+      throw error;
+    }
   }
 };
 
 export const toFav = async (id, email, token) => {
   try {
-    console.log("toFav API call - id:", id, "email:", email, "token present:", !!token);
     
     const response = await api.post(
       `/user/toFav/${id}`,
@@ -164,7 +193,6 @@ export const toFav = async (id, email, token) => {
       }
     );
     
-    console.log("toFav API response:", response.data);
     return response.data;
   } catch (e) {
     console.error("toFav error:", e);
@@ -186,7 +214,11 @@ export const getAllFav = async (email, token) => {
 
   }catch(e)
   {
-    toast.error("Something went wrong while fetching favs");
+    console.error("getAllFav error:", e);
+    // Only show toast for non-authentication errors
+    if (e.response?.status !== 401 && e.response?.status !== 404) {
+      console.error("Non-auth error in getAllFav:", e);
+    }
     throw e
   }
 } 
@@ -194,7 +226,6 @@ export const getAllFav = async (email, token) => {
 
 export const getAllBookings = async (email, token) => {
   try {
-    console.log("getAllBookings API call - email:", email, "token present:", !!token);
     
     const headers = {};
     if (token) {
@@ -211,12 +242,9 @@ export const getAllBookings = async (email, token) => {
       }
     );
     
-    console.log("getAllBookings API response:", res.data);
-    
     if (res.data && res.data.bookedVisits) {
       return res.data.bookedVisits;
     } else {
-      console.log("No bookedVisits in response, returning empty array");
       return [];
     }
     
@@ -226,7 +254,6 @@ export const getAllBookings = async (email, token) => {
     
     // If authentication fails, try without token as fallback
     if (error.response?.status === 401) {
-      console.log("Authentication failed, trying without token...");
       try {
         const fallbackRes = await api.post(
           `/user/allBookings-no-auth`,
@@ -235,8 +262,6 @@ export const getAllBookings = async (email, token) => {
           }
         );
         
-        console.log("Fallback getAllBookings API response:", fallbackRes.data);
-        
         if (fallbackRes.data && fallbackRes.data.bookedVisits) {
           return fallbackRes.data.bookedVisits;
         } else {
@@ -244,13 +269,20 @@ export const getAllBookings = async (email, token) => {
         }
       } catch (fallbackError) {
         console.error("Fallback getAllBookings error:", fallbackError);
-        toast.error("Authentication failed. Please login again.");
+        // Don't show toast for authentication errors during page load
+        if (fallbackError.response?.status !== 401 && fallbackError.response?.status !== 404) {
+          console.error("Non-auth fallback error in getAllBookings:", fallbackError);
+        }
         throw fallbackError;
       }
     } else if (error.response?.status === 404) {
-      toast.error("User not found. Please check your account.");
+      // Don't show toast for 404 errors during page load
+      console.log("User not found, returning empty bookings");
     } else {
-      toast.error("Something went wrong while fetching bookings");
+      // Only show toast for non-authentication errors
+      if (error.response?.status !== 401) {
+        console.error("Non-auth error in getAllBookings:", error);
+      }
     }
     throw error;
   }
@@ -259,7 +291,6 @@ export const getAllBookings = async (email, token) => {
 
 export const testAuth = async (token) => {
   try {
-    console.log("Testing auth with token:", token ? "present" : "missing");
     
     const headers = {};
     if (token) {
@@ -267,7 +298,6 @@ export const testAuth = async (token) => {
     }
     
     const res = await api.get("/residency/test-auth", { headers });
-    console.log("Auth test successful:", res.data);
     return res.data;
   } catch (error) {
     console.error("Auth test failed:", error);
@@ -276,12 +306,9 @@ export const testAuth = async (token) => {
 };
 
 export const createResidency = async (data, token) => {
-  console.log("createResidency API call - data:", data, "token present:", !!token);
-  console.log("Token value:", token ? token.substring(0, 20) + "..." : "null");
   
   // If token is placeholder, skip authentication
   if (token === "placeholder") {
-    console.log("Using placeholder token, skipping authentication");
     try {
       const res = await api.post(
         `/residency/create-no-auth`,
@@ -290,7 +317,6 @@ export const createResidency = async (data, token) => {
         }
       );
       
-      console.log("createResidency API response (no-auth):", res.data);
       return res.data;
     } catch (error) {
       console.error("createResidency error (no-auth):", error);
@@ -306,8 +332,6 @@ export const createResidency = async (data, token) => {
       headers.Authorization = `Bearer ${token}`;
     }
     
-    console.log("Request headers:", headers);
-    
     const res = await api.post(
       `/residency/create`,
       {
@@ -318,7 +342,6 @@ export const createResidency = async (data, token) => {
       }
     );
     
-    console.log("createResidency API response:", res.data);
     return res.data;
   }catch(error)
   {
@@ -328,7 +351,6 @@ export const createResidency = async (data, token) => {
     
     // If authentication fails, try without token as fallback
     if (error.response?.status === 401) {
-      console.log("Authentication failed, trying without token...");
       try {
         const fallbackRes = await api.post(
           `/residency/create-no-auth`,
@@ -337,7 +359,6 @@ export const createResidency = async (data, token) => {
           }
         );
         
-        console.log("Fallback createResidency API response:", fallbackRes.data);
         return fallbackRes.data;
       } catch (fallbackError) {
         console.error("Fallback createResidency error:", fallbackError);
@@ -351,3 +372,476 @@ export const createResidency = async (data, token) => {
     }
   }
 }
+
+export const getPropertyVisitors = async (email, token) => {
+  try {
+    
+    const headers = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    
+    const response = await api.post(
+      `/user/propertyVisitors`,
+      {
+        email,
+      },
+      {
+        headers,
+      }
+    );
+    
+    if (response.data && response.data.visitors) {
+      return response.data.visitors;
+    } else {
+      return [];
+    }
+    
+  } catch (error) {
+    console.error("getPropertyVisitors error:", error);
+    console.error("Error response:", error.response?.data);
+    
+    // If authentication fails, try without token as fallback
+    if (error.response?.status === 401) {
+      try {
+        const fallbackResponse = await api.post(
+          `/user/propertyVisitors-no-auth`,
+          {
+            email,
+          }
+        );
+        
+        if (fallbackResponse.data && fallbackResponse.data.visitors) {
+          return fallbackResponse.data.visitors;
+        } else {
+          return [];
+        }
+      } catch (fallbackError) {
+        console.error("Fallback getPropertyVisitors error:", fallbackError);
+        // Don't show toast for authentication errors during page load
+        if (fallbackError.response?.status !== 401 && fallbackError.response?.status !== 404) {
+          console.error("Non-auth fallback error in getPropertyVisitors:", fallbackError);
+        }
+        throw fallbackError;
+      }
+    } else if (error.response?.status === 404) {
+      // Don't show toast for 404 errors during page load
+      console.log("User not found, returning empty visitors");
+    } else {
+      // Only show toast for non-authentication errors
+      if (error.response?.status !== 401) {
+        console.error("Non-auth error in getPropertyVisitors:", error);
+      }
+    }
+    throw error;
+  }
+};
+
+export const getOwnedProperties = async (email, token) => {
+  try {
+    
+    const headers = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    
+    const response = await api.post(
+      `/residency/owned`,
+      {
+        email,
+      },
+      {
+        headers,
+      }
+    );
+    
+    if (response.data && response.data.properties) {
+      return response.data.properties;
+    } else {
+      return [];
+    }
+    
+  } catch (error) {
+    console.error("getOwnedProperties error:", error);
+    console.error("Error response:", error.response?.data);
+    
+    // If authentication fails, try without token as fallback
+    if (error.response?.status === 401) {
+      try {
+        const fallbackResponse = await api.post(
+          `/residency/owned-no-auth`,
+          {
+            email,
+          }
+        );
+        
+        if (fallbackResponse.data && fallbackResponse.data.properties) {
+          return fallbackResponse.data.properties;
+        } else {
+          return [];
+        }
+      } catch (fallbackError) {
+        console.error("Fallback getOwnedProperties error:", fallbackError);
+        // Don't show toast for authentication errors during page load
+        if (fallbackError.response?.status !== 401 && fallbackError.response?.status !== 404) {
+          console.error("Non-auth fallback error in getOwnedProperties:", fallbackError);
+        }
+        throw fallbackError;
+      }
+    } else if (error.response?.status === 404) {
+      // Don't show toast for 404 errors during page load
+      console.log("User not found, returning empty properties");
+    } else {
+      // Only show toast for non-authentication errors
+      if (error.response?.status !== 401) {
+        console.error("Non-auth error in getOwnedProperties:", error);
+      }
+    }
+    throw error;
+  }
+};
+
+export const updateResidency = async (id, data, token, userEmail) => {
+  
+  // Add userEmail to the data
+  const requestData = {
+    ...data,
+    userEmail: userEmail
+  };
+  
+  // If token is placeholder, skip authentication
+  if (token === "placeholder") {
+    try {
+      const res = await api.put(
+        `/residency/update-no-auth/${id}`,
+        {
+          data: requestData
+        }
+      );
+      
+      return res.data;
+    } catch (error) {
+      console.error("updateResidency error (no-auth):", error);
+      const errorMessage = error.response?.data?.message || "Something went wrong while updating property";
+      toast.error(errorMessage);
+      throw error;
+    }
+  }
+  
+  try {
+    const headers = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    
+    const res = await api.put(
+      `/residency/update/${id}`,
+      {
+        data: requestData
+      },
+      {
+        headers,
+      }
+    );
+    
+    return res.data;
+  } catch (error) {
+    console.error("updateResidency error:", error);
+    console.error("Error response:", error.response?.data);
+    console.error("Error status:", error.response?.status);
+    
+    // If authentication fails, try without token as fallback
+    if (error.response?.status === 401) {
+      try {
+        const fallbackRes = await api.put(
+          `/residency/update-no-auth/${id}`,
+          {
+            data: requestData
+          }
+        );
+        
+        return fallbackRes.data;
+      } catch (fallbackError) {
+        console.error("Fallback updateResidency error:", fallbackError);
+        toast.error("Authentication failed. Please login again.");
+        throw fallbackError;
+      }
+    } else {
+      const errorMessage = error.response?.data?.message || "Something went wrong while updating property";
+      toast.error(errorMessage);
+      throw error;
+    }
+  }
+};
+
+export const deleteResidency = async (id, email, token) => {
+  
+  // If token is placeholder, skip authentication
+  if (token === "placeholder") {
+    try {
+      const res = await api.delete(
+        `/residency/delete-no-auth/${id}`,
+        {
+          data: { userEmail: email }
+        }
+      );
+      
+      return res.data;
+    } catch (error) {
+      console.error("deleteResidency error (no-auth):", error);
+      const errorMessage = error.response?.data?.message || "Something went wrong while deleting property";
+      toast.error(errorMessage);
+      throw error;
+    }
+  }
+  
+  try {
+    const headers = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    
+    const res = await api.delete(
+      `/residency/delete/${id}`,
+      {
+        data: { userEmail: email },
+        headers,
+      }
+    );
+    
+    return res.data;
+  } catch (error) {
+    console.error("deleteResidency error:", error);
+    console.error("Error response:", error.response?.data);
+    console.error("Error status:", error.response?.status);
+    
+    // If authentication fails, try without token as fallback
+    if (error.response?.status === 401) {
+      try {
+        const fallbackRes = await api.delete(
+          `/residency/delete-no-auth/${id}`,
+          {
+            data: { userEmail: email }
+          }
+        );
+        
+        return fallbackRes.data;
+      } catch (fallbackError) {
+        console.error("Fallback deleteResidency error:", fallbackError);
+        toast.error("Authentication failed. Please login again.");
+        throw fallbackError;
+      }
+    } else {
+      const errorMessage = error.response?.data?.message || "Something went wrong while deleting property";
+      toast.error(errorMessage);
+      throw error;
+    }
+  }
+};
+
+export const acceptVisit = async (visitorEmail, propertyId, propertyOwnerEmail, token) => {
+  
+  // If token is placeholder, skip authentication
+  if (token === "placeholder") {
+    try {
+      const res = await api.post(
+        `/user/accept-visit-no-auth/${visitorEmail}/${propertyId}`,
+        {
+          propertyOwnerEmail
+        }
+      );
+      
+      return res.data;
+    } catch (error) {
+      console.error("acceptVisit error (no-auth):", error);
+      const errorMessage = error.response?.data?.message || "Something went wrong while accepting visit";
+      toast.error(errorMessage);
+      throw error;
+    }
+  }
+  
+  try {
+    const headers = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    
+    const res = await api.post(
+      `/user/accept-visit/${visitorEmail}/${propertyId}`,
+      {
+        propertyOwnerEmail
+      },
+      {
+        headers,
+      }
+    );
+    
+    return res.data;
+  } catch (error) {
+    console.error("acceptVisit error:", error);
+    console.error("Error response:", error.response?.data);
+    console.error("Error status:", error.response?.status);
+    
+    // If authentication fails, try without token as fallback
+    if (error.response?.status === 401) {
+      try {
+        const fallbackRes = await api.post(
+          `/user/accept-visit-no-auth/${visitorEmail}/${propertyId}`,
+          {
+            propertyOwnerEmail
+          }
+        );
+        
+        return fallbackRes.data;
+      } catch (fallbackError) {
+        console.error("Fallback acceptVisit error:", fallbackError);
+        toast.error("Authentication failed. Please login again.");
+        throw fallbackError;
+      }
+    } else {
+      const errorMessage = error.response?.data?.message || "Something went wrong while accepting visit";
+      toast.error(errorMessage);
+      throw error;
+    }
+  }
+};
+
+export const rescheduleVisit = async (visitorEmail, propertyId, propertyOwnerEmail, newDate, newTime, token) => {
+  
+  // If token is placeholder, skip authentication
+  if (token === "placeholder") {
+    try {
+      const res = await api.post(
+        `/user/reschedule-visit-no-auth/${visitorEmail}/${propertyId}`,
+        {
+          propertyOwnerEmail,
+          newDate,
+          newTime
+        }
+      );
+      
+      return res.data;
+    } catch (error) {
+      console.error("rescheduleVisit error (no-auth):", error);
+      const errorMessage = error.response?.data?.message || "Something went wrong while rescheduling visit";
+      toast.error(errorMessage);
+      throw error;
+    }
+  }
+  
+  try {
+    const headers = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    
+    const res = await api.post(
+      `/user/reschedule-visit/${visitorEmail}/${propertyId}`,
+      {
+        propertyOwnerEmail,
+        newDate,
+        newTime
+      },
+      {
+        headers,
+      }
+    );
+    
+    return res.data;
+  } catch (error) {
+    console.error("rescheduleVisit error:", error);
+    console.error("Error response:", error.response?.data);
+    console.error("Error status:", error.response?.status);
+    
+    // If authentication fails, try without token as fallback
+    if (error.response?.status === 401) {
+      try {
+        const fallbackRes = await api.post(
+          `/user/reschedule-visit-no-auth/${visitorEmail}/${propertyId}`,
+          {
+            propertyOwnerEmail,
+            newDate,
+            newTime
+          }
+        );
+        
+        return fallbackRes.data;
+      } catch (fallbackError) {
+        console.error("Fallback rescheduleVisit error:", fallbackError);
+        toast.error("Authentication failed. Please login again.");
+        throw fallbackError;
+      }
+    } else {
+      const errorMessage = error.response?.data?.message || "Something went wrong while rescheduling visit";
+      toast.error(errorMessage);
+      throw error;
+    }
+  }
+};
+
+export const discardVisit = async (visitorEmail, propertyId, propertyOwnerEmail, token) => {
+  
+  // If token is placeholder, skip authentication
+  if (token === "placeholder") {
+    try {
+      const res = await api.post(
+        `/user/discard-visit-no-auth/${visitorEmail}/${propertyId}`,
+        {
+          propertyOwnerEmail
+        }
+      );
+      
+      return res.data;
+    } catch (error) {
+      console.error("discardVisit error (no-auth):", error);
+      const errorMessage = error.response?.data?.message || "Something went wrong while discarding visit";
+      toast.error(errorMessage);
+      throw error;
+    }
+  }
+  
+  try {
+    const headers = {};
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+    
+    const res = await api.post(
+      `/user/discard-visit/${visitorEmail}/${propertyId}`,
+      {
+        propertyOwnerEmail
+      },
+      {
+        headers,
+      }
+    );
+    
+    return res.data;
+  } catch (error) {
+    console.error("discardVisit error:", error);
+    console.error("Error response:", error.response?.data);
+    console.error("Error status:", error.response?.status);
+    
+    // If authentication fails, try without token as fallback
+    if (error.response?.status === 401) {
+      try {
+        const fallbackRes = await api.post(
+          `/user/discard-visit-no-auth/${visitorEmail}/${propertyId}`,
+          {
+            propertyOwnerEmail
+          }
+        );
+        
+        return fallbackRes.data;
+      } catch (fallbackError) {
+        console.error("Fallback discardVisit error:", fallbackError);
+        toast.error("Authentication failed. Please login again.");
+        throw fallbackError;
+      }
+    } else {
+      const errorMessage = error.response?.data?.message || "Something went wrong while discarding visit";
+      toast.error(errorMessage);
+      throw error;
+    }
+  }
+};

@@ -14,15 +14,15 @@ const Header = () => {
   const [menuOpened, setMenuOpened] = useState(false);
   const headerColor = useHeaderColor();
   const [modalOpened, setModalOpened] = useState(false);
-  const { loginWithRedirect, isAuthenticated, user, logout } = useAuth0();
+  const { loginWithRedirect, isAuthenticated } = useAuth0();
   const { validateLogin } = useAuthCheck();
-
 
   const handleAddPropertyClick = () => {
     if (validateLogin()) {
       setModalOpened(true);
     }
   };
+
   return (
     <section className="h-wrapper" style={{ background: headerColor }}>
       <div className="flexCenter innerWidth paddings h-container">
@@ -37,11 +37,7 @@ const Header = () => {
             setMenuOpened(false);
           }}
         >
-          <div
-            // ref={menuRef}
-            className="flexCenter h-menu"
-            style={getMenuStyles(menuOpened)}
-          >
+          <div className="flexCenter h-menu" style={getMenuStyles(menuOpened)}>
             <NavLink to="/properties">Properties</NavLink>
 
             <a href="mailto:sushantgupta.dev@gmail.com">Contact</a>
@@ -55,7 +51,7 @@ const Header = () => {
                 Login
               </button>
             ) : (
-              <ProfileMenu user={user} logout={logout} />
+              <ProfileMenu />
             )}
           </div>
         </OutsideClickHandler>

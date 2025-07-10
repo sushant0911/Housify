@@ -1,0 +1,218 @@
+.visitor-menu-trigger {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.visitor-menu-trigger:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.mantine-Modal-root .mantine-Modal-title {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.mantine-Modal-root .mantine-Modal-close {
+  color: white;
+}
+
+.mantine-Modal-root .mantine-Modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Form styles */
+.mantine-TextInput-root {
+  margin-bottom: 0.5rem;
+}
+
+.mantine-TextInput-label {
+  font-weight: 500;
+  color: var(--primary);
+  margin-bottom: 0.25rem;
+}
+
+.mantine-TextInput-input {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.mantine-TextInput-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(64, 102, 255, 0.1);
+}
+
+/* Button styles */
+.mantine-Button-root {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.mantine-k3ov3c {
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.mantine-Button-root:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.mantine-Button-root[data-variant="outline"] {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.mantine-Button-root[data-variant="outline"]:hover {
+  background: var(--lightBlue);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.mantine-Button-root[data-color="orange"] {
+  background: var(--orange-gradient);
+  border: none;
+  color: white;
+}
+
+.mantine-Button-root[data-color="orange"]:hover {
+  background: var(--orange-gradient);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 135, 11, 0.4);
+}
+
+/* Alert styles */
+.mantine-Alert-root {
+  border-radius: 8px;
+  border: none;
+}
+
+.mantine-Alert-root[data-variant="light"] {
+  background: var(--lightBlue);
+  backdrop-filter: blur(4px);
+}
+
+.mantine-Alert-root[data-color="blue"] {
+  background: var(--lightBlue);
+  color: var(--primary);
+}
+
+/* Menu styles */
+.mantine-Menu-dropdown {
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e9ecef;
+  background: white;
+}
+
+.mantine-Menu-item {
+  border-radius: 6px;
+  margin: 2px 4px;
+  transition: all 0.2s ease;
+  color: var(--primary);
+}
+
+.mantine-Menu-item[data-selected] {
+  background: var(--blue-gradient);
+  color: white;
+}
+
+.mantine-Menu-item[data-color="green"] {
+  color: #28a745;
+}
+
+.mantine-Menu-item[data-color="green"]:hover {
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.mantine-Menu-item[data-color="orange"] {
+  color: #fd7e14;
+}
+
+.mantine-Menu-item[data-color="orange"]:hover {
+  background: rgba(253, 126, 20, 0.1);
+  color: #fd7e14;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .visitor-menu-trigger {
+    top: 8px;
+    right: 8px;
+    size: "md";
+  }
+
+  .mantine-Modal-root {
+    margin: 1rem;
+  }
+
+  .mantine-Group-root {
+    flex-direction: column;
+  }
+
+  .mantine-Group-root .mantine-Button-root {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .visitor-menu-trigger {
+    top: 5px;
+    right: 5px;
+    size: "sm";
+  }
+}
+
+.tab {
+  display: inline-block;
+  padding: 16px 24px;
+  cursor: pointer;
+  position: relative;
+  font-weight: 600;
+  color: #2d2d2d;
+}
+
+.tab.active {
+  color: #1a73e8; /* or your active color */
+}
+
+.tab.active::after {
+  content: "";
+  display: block;
+  margin: 0 auto;
+  width: 60%;
+  border-bottom: 3px solid #1a73e8; /* underline color */
+  border-radius: 2px;
+  margin-top: 8px;
+}

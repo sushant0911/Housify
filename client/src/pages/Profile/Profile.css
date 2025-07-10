@@ -1,0 +1,562 @@
+.profile-container {
+  padding: 2rem 0;
+  min-height: 100vh;
+}
+
+/* Profile Header */
+.profile-header {
+  background: var(--black);
+  border: none;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.profile-avatar {
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-name {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-email {
+  margin-top: -10px;
+  color: var(--secondary);
+  font-weight: 500;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.add-property-btn {
+  background: var(--orange-gradient);
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(251, 135, 11, 0.3);
+}
+
+.add-property-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(251, 135, 11, 0.4);
+}
+
+/* Profile Tabs */
+.profile-tabs {
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.tab-group {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Remove Mantine filled button shadow and background for tabs */
+.tab-button.mantine-Button-filled {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--primary) !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* Raised and underlined effect for active tab */
+.tab-button.mantine-Button-filled {
+  transform: translateY(-6px);
+}
+
+/* Remove background and shadow for all tab buttons */
+.tab-button {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: var(--primary);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  flex: 1 1 0;
+  min-width: 120px;
+  max-width: 100%;
+  padding: 0.75rem 1.5rem;
+  text-align: center;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+
+.tab-button.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.mantine-1ryt1ht {
+  white-space: nowrap;
+  height: 200%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.tab-button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 90%;
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #ffffff, rgb(255, 162, 0));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), transform-origin 0s;
+  z-index: 2;
+  align-items: center;
+}
+
+.tab-button:hover::after,
+.tab-button.mantine-Button-filled::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Remove any previous tab underline rules below this line */
+
+/* Search Section */
+.search-section {
+  max-width: 450px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.search-input .mantine-TextInput-input {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: white;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+}
+
+.search-input .mantine-TextInput-input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(64, 102, 255, 0.1);
+}
+
+.search-input .mantine-TextInput-input::placeholder {
+  color: #6c757d;
+  font-weight: 400;
+}
+
+.search-input .mantine-TextInput-section {
+  color: var(--primary);
+}
+
+/* Profile Content */
+.profile-content {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.profile-container .search-bar {
+  border-radius: 30px;
+}
+
+.search-bar > input {
+  width: 60%;
+}
+
+.profile-container .search-bar > button {
+  border-radius: 20px;
+}
+
+.tab-content {
+  min-height: 400px;
+}
+
+.content-header {
+  margin-bottom: 2rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.header-text h2 {
+  color: var(--primary);
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.header-text .mantine-Title-root {
+  color: var(--primary);
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.header-text .mantine-Text-root {
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Properties Grid */
+.properties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* Booking Property Wrapper */
+.booking-property-wrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+}
+
+.booking-property-wrapper:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.booking-info-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(20, 20, 20, 0.55); /* faded dark overlay */
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  opacity: 0;
+  transition: opacity 0.3s;
+  padding: 1rem;
+  z-index: 2;
+}
+
+.booking-property-wrapper:hover .booking-info-overlay {
+  opacity: 1;
+}
+
+.booking-info-overlay .visit-date {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+}
+
+.booking-status-badge {
+  align-self: flex-start;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.booking-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.visitors-header-text .mantine-Title-root {
+  color: var(--primary);
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Visitors Section */
+.visitors-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.visitors-header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.visitors-header-text .mantine-Title-root {
+  color: var(--primary);
+  font-weight: 700;
+  margin-top: 15px;
+  line-height: 1.2;
+}
+
+.filter-section {
+  min-width: 300px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.visitors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.visitor-card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.visitor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: var(--blue);
+}
+.visitor-details-container {
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.visitor-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.visitor-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Empty States */
+.empty-state {
+  text-align: center;
+  border-radius: 12px;
+  background: var(--lightBlue);
+  border: 2px dashed var(--blue);
+}
+
+.empty-state-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.empty-state-content h3 {
+  color: var(--primary);
+  margin: 0;
+  font-weight: 600;
+}
+
+.empty-state-content p {
+  color: var(--black);
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+/* View Visitors Button */
+.view-visitors-btn {
+  background: var(--blue-gradient);
+  border: none;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  margin-top: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.view-visitors-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(64, 102, 255, 0.3);
+}
+
+.bookings-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.bookings-header-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .profile-header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  
+  .profile-header {
+    margin: 20px;
+    padding: 20px;
+    
+  }
+
+  .profile-info {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .profile-name {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 1rem 0;
+  }
+
+  .profile-header {
+    margin-bottom: 1rem;
+  }
+
+  .profile-tabs {
+    margin-bottom: 1rem;
+  }
+
+  .profile-content {
+    padding: 1rem;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .search-section {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .search-input {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .properties-grid,
+  .visitors-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .profile-stats {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .filter-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .booking-info-overlay {
+    opacity: 1;
+    pointer-events: auto;
+    background: var(--blue-gradient);
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-name {
+    font-size: 1.5rem;
+  }
+
+  .profile-avatar {
+    size: 80;
+  }
+
+  .profile-tabs .mantine-Group-root {
+    flex-direction: column;
+  }
+
+  .visitor-header {
+    flex-direction: column;
+    text-align: center;
+  }
+}

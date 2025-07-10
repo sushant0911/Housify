@@ -1,71 +1,119 @@
-.property-container{
-    gap: 2rem;
-    position: relative;
+.property-container {
+  gap: 2rem;
+  position: relative;
 }
 
-.property-container .like{
-    position: absolute;
-    top: 3rem;right: 3rem;
-    cursor: pointer;
+.property-container .like {
+  position: absolute;
+  top: 3rem;
+  right: 3rem;
+  cursor: pointer;
 }
 
-
-.property-container>img{
-    align-self: center;
-    max-height: 35rem;
-    width: 100%;
-    border-radius: 1rem;
-    object-fit: cover;
+.property-container > img {
+  align-self: center;
+  max-height: 35rem;
+  width: 100%;
+  border-radius: 1rem;
+  object-fit: cover;
 }
 
-.property-details{
-    width: 100%;
-    gap: 2rem;
-    justify-content: space-between;
+.property-details {
+  width: 100%;
+  gap: 2rem;
+  justify-content: space-between;
 }
 
-.property-details>div{
-    flex: 1;
-    gap: 1.5rem;
+.property-details > div {
+  flex: 1;
+  gap: 1.5rem;
 }
 
-.property-details .left .head{
-    justify-content: space-between;
-    width: 100%;
+.property-details .left .head {
+  justify-content: space-between;
+  width: 100%;
 }
 
-.facilities{
-    gap: 1rem;
-    font-size: 0.9rem;
-    padding: 1rem;
+.facilities {
+  gap: 1rem;
+  font-size: 0.9rem;
+  padding: 1rem;
 }
 
-.facility{
-    gap: 0.5rem;
+.facility {
+  gap: 0.5rem;
 }
 
-.property-details .button{
-    width: 100%;
-    margin-top: 1rem;
+.property-details .button {
+  width: 100%;
+  margin-top: 1rem;
 }
 
-.property-details .button:hover{
-    transform: scale(1.05);
+.property-details .button:hover {
+  transform: scale(1.05);
 }
 
+/* Property owner section styles */
+.property-owner-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 2px solid #dee2e6;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.property-owner-section .owner-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.property-owner-section .owner-subtitle {
+  font-size: 0.9rem;
+  color: #6c757d;
+  text-align: center;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+}
+
+.property-owner-section .visitors-button {
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.property-owner-section .visitors-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
 
 @media (max-width: 700px) {
-    .property-container>div{
-        flex-direction: column;
-    }
-    .head{
-        flex-direction: column;
-    }
-    .facilities{
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    .property-details>div{
-        width: 100%;
-    }
+  .property-container > div {
+    flex-direction: column;
+  }
+  .head {
+    flex-direction: column;
+  }
+  .facilities {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .property-details > div {
+    width: 100%;
+  }
+
+  .property-owner-section {
+    padding: 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .property-owner-section .owner-title {
+    font-size: 1rem;
+  }
+
+  .property-owner-section .owner-subtitle {
+    font-size: 0.85rem;
+  }
 }

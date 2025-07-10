@@ -2,28 +2,30 @@ import React, { useContext, useEffect, useRef } from "react";
 import UserDetailContext from "../context/UserDetailContext";
 import { useQuery } from "react-query";
 import { useAuth0 } from "@auth0/auth0-react";
-import { getAllBookings, getAllFav } from "../utils/api";
+import { getOwnedProperties } from "../utils/api";
 
-const useBookings = () => {
-  const { userDetails, setUserDetails } = useContext(UserDetailContext);
+const useOwnedProperties = () => {
+  const { userDetails } = useContext(UserDetailContext);
   const queryRef = useRef();
   const { user, isAuthenticated } = useAuth0();
 
+  // Ensure all conditions are boolean
   const isEnabled = Boolean(
     isAuthenticated && user?.email && userDetails?.token
   );
 
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["allBookings", user?.email],
-    queryFn: () => getAllBookings(user?.email, userDetails?.token),
+    queryKey: ["ownedProperties", user?.email],
+    queryFn: () => getOwnedProperties(user?.email, userDetails?.token),
     onSuccess: (data) => {
-      setUserDetails((prev) => ({ ...prev, bookings: data }));
+      console.log("Owned properties fetched successfully:", data);
     },
     onError: (error) => {
+      console.error("Error fetching owned properties:", error);
+      // Don't show toast for authentication errors on page load
       if (error.response?.status !== 401 && error.response?.status !== 404) {
-        console.error("Non-auth error in bookings:", error);
+        console.error("Non-auth error in owned properties:", error);
       }
-      setUserDetails((prev) => ({ ...prev, bookings: [] }));
     },
     enabled: isEnabled,
     staleTime: 30000,
@@ -41,4 +43,4 @@ const useBookings = () => {
   return { data, isError, isLoading, refetch };
 };
 
-export default useBookings;
+export default useOwnedProperties;

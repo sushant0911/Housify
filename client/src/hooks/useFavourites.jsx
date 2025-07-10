@@ -9,7 +9,6 @@ const useFavourites = () => {
   const queryRef = useRef();
   const { user, isAuthenticated } = useAuth0();
 
-  // Ensure all conditions are boolean
   const isEnabled = Boolean(isAuthenticated && user?.email);
 
   const { data, isLoading, isError, refetch } = useQuery({
@@ -19,6 +18,12 @@ const useFavourites = () => {
       if (data) {
         setUserDetails((prev) => ({ ...prev, favourites: data }));
       }
+    },
+    onError: (error) => {
+      if (error.response?.status !== 401 && error.response?.status !== 404) {
+        console.error("Non-auth error in favourites:", error);
+      }
+      setUserDetails((prev) => ({ ...prev, favourites: [] }));
     },
     enabled: isEnabled,
     staleTime: 30000,

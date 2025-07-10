@@ -1,7 +1,6 @@
 import { Suspense, useState } from "react";
 import "./App.css";
 import Layout from "./components/Layout/Layout";
-
 import Website from "./pages/Website";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Properties from "./pages/Properties/Properties";
@@ -11,15 +10,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Property from "./pages/Property/Property";
 import UserDetailContext from "./context/UserDetailContext";
-import Bookings from "./pages/Bookings/Bookings";
-import Favourites from "./pages/Favourites/Favourites";
+import MyProperties from "./pages/MyProperties/MyProperties";
+import Profile from "./pages/Profile/Profile";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 function App() {
   const queryClient = new QueryClient();
-
-  // Initialize token from localStorage if available
   const initialToken = localStorage.getItem("access_token");
-
   const [userDetails, setUserDetails] = useState({
     favourites: [],
     bookings: [],
@@ -38,8 +35,15 @@ function App() {
                   <Route index element={<Properties />} />
                   <Route path=":propertyId" element={<Property />} />
                 </Route>
-                <Route path="/bookings" element={<Bookings />} />
-                <Route path="/favourites" element={<Favourites />} />
+                <Route path="/my-properties" element={<MyProperties />} />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
             </Routes>
           </Suspense>

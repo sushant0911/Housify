@@ -1,0 +1,121 @@
+.property-menu-trigger {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.property-menu-trigger:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Form styles */
+.mantine-TextInput-root,
+.mantine-Textarea-root,
+.mantine-NumberInput-root {
+  margin-bottom: 0.5rem;
+}
+
+.mantine-TextInput-label,
+.mantine-Textarea-label,
+.mantine-NumberInput-label {
+  font-weight: 500;
+  color: #1f3e72;
+  margin-bottom: 0.25rem;
+}
+
+.mantine-TextInput-input,
+.mantine-Textarea-input,
+.mantine-NumberInput-input {
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.mantine-TextInput-input:focus,
+.mantine-Textarea-input:focus,
+.mantine-NumberInput-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Button styles */
+.mantine-Button-root {
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.mantine-Button-root:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Alert styles */
+.mantine-Alert-root {
+  border-radius: 8px;
+  border: none;
+}
+
+.mantine-Alert-root[data-variant="light"] {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+}
+
+/* Menu styles */
+.mantine-Menu-dropdown {
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e9ecef;
+}
+
+.mantine-Menu-item {
+  border-radius: 6px;
+  margin: 2px 4px;
+  transition: all 0.2s ease;
+}
+
+.mantine-Menu-item:hover {
+  background: #f8f9fa;
+  transform: translateX(2px);
+}
+
+.mantine-Menu-item[data-selected] {
+  background: #667eea;
+  color: white;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .property-menu-trigger {
+    top: 8px;
+    right: 8px;
+    size: "md";
+  }
+
+  .mantine-Modal-root {
+    margin: 1rem;
+  }
+
+  .mantine-Group-root {
+    flex-direction: column;
+  }
+
+  .mantine-Group-root .mantine-Button-root {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .property-menu-trigger {
+    top: 5px;
+    right: 5px;
+    size: "sm";
+  }
+}
