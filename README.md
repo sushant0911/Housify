@@ -117,3 +117,6 @@ This project is licensed under the MIT License.
 - [Mantine UI](https://mantine.dev/) for UI components
 - [Auth0](https://auth0.com/) for authentication
 - [Prisma](https://www.prisma.io/) for ORM
+
+---------------------------------------------------------------------------------------------------------------------------
+DO GIVE A STAR IF YOU LIKE THE PROJECT
