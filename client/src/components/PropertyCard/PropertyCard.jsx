@@ -7,7 +7,7 @@ import { Badge } from "@mantine/core";
 import Heart from "../Heart/Heart";
 import PropertyManagement from "../PropertyManagement/PropertyManagement";
 
-const PropertyCard = ({ card }) => {
+const PropertyCard = ({ card, bookingStatus }) => {
   const navigate = useNavigate();
   const { user } = useAuth0();
 
@@ -28,7 +28,27 @@ const PropertyCard = ({ card }) => {
         </div>
       )}
 
-      {isOwned && (
+      {/* Booking Status Badge */}
+      {bookingStatus && (
+        <Badge
+          color={bookingStatus === "confirmed" ? "green" : "blue"}
+          variant="filled"
+          style={{
+            position: "absolute",
+            top: "10px",
+            left: "10px",
+            zIndex: 10,
+            fontSize: "0.7rem",
+            fontWeight: "600",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+          }}
+        >
+          {bookingStatus === "confirmed" ? "Approved" : "Pending"}
+        </Badge>
+      )}
+
+      {/* Owned Badge - show only if not showing booking status */}
+      {isOwned && !bookingStatus && (
         <Badge
           color="green"
           variant="filled"

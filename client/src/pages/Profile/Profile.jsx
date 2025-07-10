@@ -415,6 +415,7 @@ const Profile = () => {
                         <PropertyCard
                           key={booking.property.id || index}
                           card={booking.property}
+                          bookingStatus={booking.status}
                           onClick={() =>
                             navigate(`/property/${booking.property.id}`)
                           }
